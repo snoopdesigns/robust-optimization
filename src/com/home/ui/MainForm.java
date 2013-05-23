@@ -40,7 +40,7 @@ public class MainForm extends JFrame implements  ActionListener{
 	private JTextField textfield3 = new JTextField(5);
 	private JTextField textfield4 = new JTextField(5);
 	private File file;
-	private RobustOptimizationCore robustWorker = new RobustOptimizationCore("E:\\EclipseProjects\\RobustOpt\\jni");
+	private RobustOptimizationCore robustWorker = new RobustOptimizationCore("C:\\Users\\liza\\workspace\\RobustOpt\\jni");
 	
 	private static final long serialVersionUID = 1L;
 	public MainForm(){
@@ -184,7 +184,27 @@ public class MainForm extends JFrame implements  ActionListener{
 			
 		}
 		if(e.getSource() == button3) {
-			Graph graphForm = new Graph();
+			if (textfield1.getText().length()!=0 & textfield2.getText().length()!=0 &
+					 textfield3.getText().length()!=0 ) {
+				Vector<String> vc = new Vector<>();
+				String filename = textfield1.getText().replace("\\", "/");
+				vc.add(filename);
+				vc.add(textfield2.getText());
+				vc.add(textfield3.getText());
+				vc.add(textfield4.getText());
+				if(rb1.isSelected()) {
+					vc.add("1"); 
+				} else {
+					vc.add("2");
+				}
+				this.robustWorker.getGraph(this,vc.toArray());
+				System.out.println("JAVA DONE");
+				FileParser parser = new FileParser("jni//out_g.txt");
+				Vector<ParseData> inputData = parser.beginParse();
+				System.out.println(inputData);
+				@SuppressWarnings("unused")
+				Graph graphForm = new Graph(inputData);
+			}
 		}
 		if(e.getSource() == button4) {
 			System.exit(0);

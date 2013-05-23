@@ -94,7 +94,7 @@ void loadGraph( string pathToGraph, string pathToNum ) {
 	ifstream f(pathToGraph.c_str());
 	ifstream vNum(pathToNum.c_str());
 
-	getline(vNum, line);
+	getline(f, line);
 	temp.clear();
 	k = 0;
 	while(k < line.length()) {
@@ -102,8 +102,8 @@ void loadGraph( string pathToGraph, string pathToNum ) {
 		k++;
 	}
 	num = atoi(temp.c_str());
-
-	getline(vNum, line);
+	//cout << "nummmmmm = " << num;
+	getline(f, line);
 	temp.clear();
 	k = 0;
 	while(k < line.length()) {
@@ -111,7 +111,7 @@ void loadGraph( string pathToGraph, string pathToNum ) {
 		k++;
 	}
 	n = atoi(temp.c_str());
-
+	//cout << "n = " << n;
 	adjacency_list.resize(num);
 	range.resize(num);
 
@@ -318,7 +318,8 @@ double findPath(string networkPath, string numPath, int start, int finish, int t
 	adjacency_list = adjacency_list_t();
 	linRange = std::vector< int > ();
 	loadGraph(networkPath, numPath);
-	type = 2;
+	cout << "type = " << type << endl;
+	//type = 1;
 
 	double ans = 0;
 
@@ -408,6 +409,17 @@ void test(string newtworkPath, string numPath, double epsilonStart, double epsil
 	cout << "FIN";
 }
 
+void startTest(string networkPath, int start, int end, double epsilonStart, double epsilonFinish, double epsilonStep)
+{
+	ofstream fg("jni/out_g.txt");
+	for (double i = epsilonStart; i < epsilonFinish; i += epsilonStep) {
+		int ans = findPath(networkPath, "", start, end, 2, 1, 0.1);
+		cout<<ans;
+		fg << i << "," << ans << endl;
+	}
+	cout << "END WORK" << endl;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -432,12 +444,27 @@ vector<vertex_t> beginParse(const char * str)
 		std::cout << "Input: " << vc.at(i).c_str() << std::endl;
 	}
 	std::cout << std::endl;
-	int ans = findPath(vc.at(0).c_str(), "e:/num.txt", atoi(vc.at(1).c_str()), atoi(vc.at(2).c_str()),
+	int ans = findPath(vc.at(0).c_str(), "", atoi(vc.at(1).c_str()), atoi(vc.at(2).c_str()),
 			atoi(vc.at(4).c_str()), 1, atof(vc.at(3).c_str()));
 	vector<vertex_t> result(min_path.begin(),min_path.end());
+	cout << "startTest call()" << endl;
+	//startTest(vc.at(0).c_str(), atoi(vc.at(1).c_str()), atoi(vc.at(2).c_str()), 0.1, 0.5, 0.01);
 	result.push_back(ans);
 	cout<<ans;
 	return result;
+}
+
+void getGraph(const char * str)
+{
+	std::string s(str);
+	std::vector<std::string> vc = split(s);
+	for(int i=0;i<vc.size();i++)
+	{
+		std::cout << "Input: " << vc.at(i).c_str() << std::endl;
+	}
+	std::cout << std::endl;
+	cout << "startTest call()" << endl;
+	startTest(vc.at(0).c_str(), atoi(vc.at(1).c_str()), atoi(vc.at(2).c_str()), 0.1, 0.5, 0.01);
 }
 
 JNIEXPORT jobjectArray JNICALL Java_com_home_ui_RobustNativeWrapper_startWork
@@ -472,4 +499,27 @@ JNIEXPORT jobjectArray JNICALL Java_com_home_ui_RobustNativeWrapper_startWork
 		env->SetObjectArrayElement(ret,i,env->NewStringUTF(resItem));
 	}
 	return (ret);
+}
+
+JNIEXPORT void JNICALL Java_com_home_ui_RobustNativeWrapper_getGraphResults
+	(JNIEnv * env, jclass clazz, jobjectArray vc)
+{
+	cout << "getGraph called" << endl;
+	int stringCount = env->GetArrayLength(vc);
+	jobjectArray ret;
+
+	char data[80];
+	for (int i=0; i<stringCount; i++) {
+		jstring string = (jstring) env->GetObjectArrayElement(vc, i);
+		const char *rawString = env->GetStringUTFChars(string, 0);
+		if(i==0)
+		{
+			strcpy(data,rawString);
+		} else {
+			strcat(data,rawString);
+		}
+		strcat(data," ");
+	}
+	getGraph(data);
+	cout << "DONE!" << endl;
 }

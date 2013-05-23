@@ -7,4 +7,5 @@ public class RobustNativeWrapper {
     }
 	
     native public static Object[] startWork(Object[] vc);
+    native public static void getGraphResults(Object[] vc);
 }

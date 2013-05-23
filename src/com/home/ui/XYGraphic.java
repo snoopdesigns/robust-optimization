@@ -17,6 +17,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class XYGraphic {
 	final ChartPanel panel;
 	static Vector<DataType> results;
+	private static double minY=10000;
+    private static double maxY=0;
 	XYGraphic(Vector<DataType> vec) {
 		results = new Vector<DataType>(vec);
 		final XYDataset dataset = createDataset();
@@ -26,11 +28,13 @@ public class XYGraphic {
 	ChartPanel getPanel() {
 		return panel;
 	}
-private static XYDataset createDataset() {
-        
+	private static XYDataset createDataset() {
         final XYSeries series1 = new XYSeries("Sample Graphic");
+        
         for(int i=0;i<results.size();i++) {
-        	series1.add(results.get(i).x, results.get(i).x);
+        	series1.add(results.get(i).x, results.get(i).y);
+        	if(results.get(i).y>maxY) maxY=results.get(i).y;
+        	if(results.get(i).y<minY) minY=results.get(i).y;
         }
         final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series1);
@@ -41,10 +45,11 @@ private static XYDataset createDataset() {
 
     private static JFreeChart createChart(final XYDataset dataset) {
   
-        final JFreeChart chart = ChartFactory.createXYLineChart("Results","X","Y",
+        final JFreeChart chart = ChartFactory.createXYLineChart("Model by Poss","Epsilon","Path length",
         			dataset,PlotOrientation.VERTICAL,true,true,false);
-        chart.setBackgroundPaint(Color.white);
+        chart.setBackgroundPaint(Color.white); 
         final XYPlot plot = chart.getXYPlot();
+        plot.getRangeAxis().setRange(minY-10,maxY+10);
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);
         plot.setRangeGridlinePaint(Color.white);

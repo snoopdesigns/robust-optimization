@@ -1,8 +1,6 @@
 package com.home.ui;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.Vector;
 
 public class RobustOptimizationCore {
 	private MainForm callbackMainForm;
@@ -38,5 +36,8 @@ public class RobustOptimizationCore {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+	public void getGraph(MainForm mainForm, Object[] vc) {
+		RobustNativeWrapper.getGraphResults(vc);
 	}
 }

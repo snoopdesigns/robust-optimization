@@ -1,5 +1,11 @@
 package com.home.ui;
 
 public class ParseData {
-	int x;
+	float eps;
+	int ans;
+	ParseData(String eps, String ans)
+	{
+		this.eps = Float.parseFloat(eps);
+		this.ans = Integer.parseInt(ans);
+	}
 }

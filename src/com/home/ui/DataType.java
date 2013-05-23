@@ -1,9 +1,9 @@
 package com.home.ui;
 
 public class DataType {
-	int x;
-	int y;
-	DataType(int x, int y) {
+	double x;
+	double y;
+	DataType(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

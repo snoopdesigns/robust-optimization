@@ -15,6 +15,14 @@ extern "C" {
 JNIEXPORT jobjectArray JNICALL Java_com_home_ui_RobustNativeWrapper_startWork
   (JNIEnv *, jclass, jobjectArray);
 
+/*
+ * Class:     com_home_ui_RobustNativeWrapper
+ * Method:    getGraphResults
+ * Signature: ([Ljava/lang/Object;)V
+ */
+JNIEXPORT void JNICALL Java_com_home_ui_RobustNativeWrapper_getGraphResults
+  (JNIEnv *, jclass, jobjectArray);
+
 #ifdef __cplusplus
 }
 #endif
